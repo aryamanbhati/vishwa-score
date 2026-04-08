@@ -1,3 +1,5 @@
+App link ---https://hello-world-7474647517748637.aws.databricksapps.com
+
 # Vishwa Score — Voice Financial Advisor & Alternative Credit Scoring
 
 *Submission for Bharat Bricks Hacks 2026*
@@ -6,7 +8,6 @@
 **Vishwa Score** is a multilingual voice-based financial advisory system that helps credit-invisible Indians discover government loan schemes and generates personalized alternative credit scores (Vishwa Score). It leverages the Databricks Data Intelligence Platform and Voice AI to provide native-language financial guidance and ML-driven underwriting for the unbanked.
 
 ---
-
 ## 🏗️ Architecture Diagram
 *How the Databricks components connect to drive the ML and Voice pipeline:*
 
