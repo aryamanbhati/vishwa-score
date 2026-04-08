@@ -1,9 +1,9 @@
-# ArthaSetu — Voice Financial Advisor & Alternative Credit Scoring
+# Vishwa Score — Voice Financial Advisor & Alternative Credit Scoring
 
 *Submission for Bharat Bricks Hacks 2026*
 
 ## 🎯 What it does
-**ArthaSetu** is a multilingual voice-based financial advisory system that helps credit-invisible Indians discover government loan schemes and generates personalized alternative credit scores (XScore). It leverages the Databricks Data Intelligence Platform and Voice AI to provide native-language financial guidance and ML-driven underwriting for the unbanked.
+**Vishwa Score** is a multilingual voice-based financial advisory system that helps credit-invisible Indians discover government loan schemes and generates personalized alternative credit scores (Vishwa Score). It leverages the Databricks Data Intelligence Platform and Voice AI to provide native-language financial guidance and ML-driven underwriting for the unbanked.
 
 ---
 
@@ -20,7 +20,7 @@ graph TD
     C -->|Feature Engineering| D[(Gold Layer)]
     
     %% ML & Search
-    D -->|MLflow & AutoML| E[LightGBM XScore Model]
+    D -->|MLflow & AutoML| E[LightGBM Vishwa Score Model]
     D -->|Databricks Vector Search| F[FAISS RAG Index]
     
     %% Application Layer
@@ -42,8 +42,8 @@ Follow these exact commands to reproduce the Databricks environment and run the 
 
 ```bash
 # 1. Clone this repository
-git clone https://github.com/aryamanbhati/ArthaSetu.git
-cd ArthaSetu
+git clone https://github.com/aryamanbhati/Vishwa Score.git
+cd Vishwa Score
 
 # 2. Install Python dependencies
 pip install -r requirements.txt
@@ -75,10 +75,10 @@ To test the application, follow these steps:
    - **Prompt to run (speak):** *"Mujhe apna thela lagane ke liye loan chahiye"* (I need a loan for pushing my street cart).
    - *Expected Action:* The app uses Vector Search to retrieve the PM SVANidhi scheme and plays a native Hindi voice response explaining the loan eligibility.
 
-2. **XScore Generation:**
-   - Navigate to the **"XScore Underwriting"** tab.
+2. **Vishwa Score Generation:**
+   - Navigate to the **"Vishwa Score Underwriting"** tab.
    - Enter a synthetic `user_id` from the Bronze dataset (e.g., `USR-004`).
-   - Click **"Calculate XScore"**.
+   - Click **"Calculate Vishwa Score"**.
    - *Expected Action:* It queries the MLflow registered LightGBM model to output a score (300-900) based on their utility/UPI payment history extracted from the Databricks Feature Store.
 
 ---
@@ -111,4 +111,4 @@ To test the application, follow these steps:
 ## 📝 Project Write-up (For Devpost Submission)
 
 *(Max 500 Characters)*
-**ArthaSetu** brings financial inclusion to 300M credit-invisible Indians. By analyzing alternative data like utility payments, it generates a credible "XScore" using Databricks MLflow. Additionally, it features a multilingual Voice AI backed by Databricks Vector Search for RAG, allowing rural users to discover government loans just by speaking in their native language. It bridges the gap between formal banking and the unbanked.
+**Vishwa Score** brings financial inclusion to 300M credit-invisible Indians. By analyzing alternative data like utility payments, it generates a credible "Vishwa Score" using Databricks MLflow. Additionally, it features a multilingual Voice AI backed by Databricks Vector Search for RAG, allowing rural users to discover government loans just by speaking in their native language. It bridges the gap between formal banking and the unbanked.
