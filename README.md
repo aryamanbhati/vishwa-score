@@ -70,13 +70,7 @@ streamlit run app/main.py
 
 To test the application, follow these steps:
 
-1. **Voice Advisory:**
-   - Open the deployed Streamlit Dashboard.
-   - Click the **Microphone** icon.
-   - **Prompt to run (speak):** *"Mujhe apna thela lagane ke liye loan chahiye"* (I need a loan for pushing my street cart).
-   - *Expected Action:* The app uses Vector Search to retrieve the PM SVANidhi scheme and plays a native Hindi voice response explaining the loan eligibility.
-
-2. **Vishwa Score Generation:**
+1. **Vishwa Score Generation:**
    - Navigate to the **"Vishwa Score Underwriting"** tab.
    - Enter a synthetic `user_id` from the Bronze dataset (e.g., `USR-004`).
    - Click **"Calculate Vishwa Score"**.
