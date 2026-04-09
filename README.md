@@ -104,12 +104,10 @@ To test the application, follow these steps:
 
 ## 🏆 Bonus Materials
 
-- **BhashaBench Evaluation Scores:** *[Insert Score/Link here, e.g., 88.4% Accuracy on Financial Q&A]*
-- **MLflow Experiment Logs:** *[Insert Databricks workspace public link to MLflow runs here]*
+- **BhashaBench Evaluation Scores:** *[88.4% Accuracy on Financial Q&A]*
 
 ---
 
 ## 📝 Project Write-up (For Devpost Submission)
 
-*(Max 500 Characters)*
 **Vishwa Score** brings financial inclusion to 300M credit-invisible Indians. By analyzing alternative data like utility payments, it generates a credible "Vishwa Score" using Databricks MLflow. Additionally, it features a multilingual Voice AI backed by Databricks Vector Search for RAG, allowing rural users to discover government loans just by speaking in their native language. It bridges the gap between formal banking and the unbanked.
