@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vishwa-score"
+version = "0.1.0"
+description = "Voice financial advisor and alternative credit scoring for credit-invisible Indians, built on Databricks."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Aryaman Bhati" }]
+keywords = ["credit-scoring", "databricks", "mlflow", "rag", "voice-ai", "financial-inclusion"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "streamlit==1.44.0",
+    "requests",
+    "databricks-sdk",
+    "databricks-sql-connector",
+    "pandas",
+    "numpy",
+    "scikit-learn",
+    "lightgbm",
+    "mlflow",
+    "faiss-cpu",
+    "sentence-transformers",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "ruff>=0.5",
+    "black>=24",
+    "pre-commit>=3",
+]
+
+[project.urls]
+Repository = "https://github.com/aryamanbhati/vishwa-score"
+Issues = "https://github.com/aryamanbhati/vishwa-score/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
