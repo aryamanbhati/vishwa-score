@@ -29,7 +29,8 @@ from sentence_transformers import SentenceTransformer
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # CONFIG
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SARVAM_KEY = "REVOKED_SARVAM_KEY_SEE_ENV"
+import os
+SARVAM_KEY = os.environ.get("SARVAM_API_KEY", "")
 
 LANG_CODE = {
     "hi": "hi-IN", "ta": "ta-IN", "te": "te-IN", "mr": "mr-IN",

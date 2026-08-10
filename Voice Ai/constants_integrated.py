@@ -4,10 +4,11 @@ ArthaSetu + Xscore — Unified Constants
 Central config for the integrated voice financial advisor.
 """
 
-# ── API Keys (use Databricks secrets in production) ──
-# In prod: dbutils.secrets.get(scope="arthasetu", key="sarvam_api_key")
-SARVAM_API_KEY = "REVOKED_SARVAM_KEY_SEE_ENV"
-HF_TOKEN       = "REVOKED_HF_TOKEN_SEE_ENV"
+# ── API Keys — read from environment. Never hardcode. ──
+# In Databricks prod: dbutils.secrets.get(scope="arthasetu", key="sarvam_api_key")
+import os
+SARVAM_API_KEY = os.environ.get("SARVAM_API_KEY", "")
+HF_TOKEN       = os.environ.get("HF_TOKEN", "")
 
 # ── Unity Catalog — ArthaSetu ──
 ARTHASETU_CATALOG = "arthasetu"

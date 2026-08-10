@@ -17,8 +17,11 @@ spark = SparkSession.builder.getOrCreate()
 spark.sql("USE CATALOG arthasetu")
 
 # ── CONFIG ────────────────────────────────────────
-SARVAM_KEY = "REVOKED_SARVAM_KEY_SEE_ENV"  # paste your key
-# os.environ["SARVAM_API_KEY"] = SARVAM_KEY
+# Read from environment. Never hardcode. Set SARVAM_API_KEY in .env or as a
+# Databricks Secret (dbutils.secrets.get(scope="sarvam", key="api_key")).
+SARVAM_KEY = os.environ.get("SARVAM_API_KEY", "")
+if not SARVAM_KEY:
+    raise RuntimeError("SARVAM_API_KEY not set. See README secrets section.")
 client = SarvamAI(api_subscription_key=SARVAM_KEY)
 
 print([m for m in dir(client) if not m.startswith('_')])

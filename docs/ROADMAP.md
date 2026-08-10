@@ -1,44 +1,36 @@
 # Roadmap
 
-Post-hackathon polish work, tracked publicly so the repo shows momentum.
+Where the project stands and what's next. Written to be honest, not aspirational.
 
-## Step 1 — Repo hygiene (done)
+## Where we are now
 
-- [x] Rename files to remove spaces / version suffixes.
-- [x] Restructure into `app/`, `notebooks/`, `src/vishwa/`, `docs/`, `tests/`, `infra/`.
-- [x] Add `.gitignore`, `LICENSE` (MIT), `pyproject.toml`, `.env.example`.
-- [x] Rewrite README with fixed clone URL, results table, roadmap.
+- **Alt-credit scoring:** working. LightGBM regressor, R²=0.8938, RMSE=14.5 on the 100K synthetic-borrower / 27.3M-transaction dataset. Trained + registered in MLflow. Explorer dashboard live on Streamlit Cloud.
+- **Voice + RAG:** working end-to-end in `Voice Ai/4_voice_pipeline.py`. FAISS index over govt loan schemes + Sarvam ASR / sarvam-m / Bulbul TTS. Tested across 4 languages inline.
+- **Secrets purged:** Sarvam key + HF token were previously committed, now revoked and removed from all git history.
+- **Repo hygiene:** file renames done; layout is still messy — two parallel workstreams (XScore + VishwaScore + ArthaSetu) coexist.
 
-## Step 2 — Extract notebooks into a real package
+## Not yet done (honest gap list)
 
-- [ ] `src/vishwa/ingestion/` — bronze / silver / gold Spark jobs (importable, testable).
-- [ ] `src/vishwa/features/` — feature engineering + Feature Store writes.
-- [ ] `src/vishwa/model/` — training, tuning, SHAP, refresh.
-- [ ] `src/vishwa/rag/` — FAISS index build + retriever.
-- [ ] `src/vishwa/voice/` — Sarvam ASR / TTS / LLM wrappers.
-- [ ] `src/vishwa/app/` — Streamlit views (leave `app/app.py` as thin entrypoint).
-- [ ] Notebooks become thin wrappers that `import vishwa.<module>` — reproducibility preserved.
+- **Feature Store registration** — notebook exists but is a one-line stub. Needs a real `FeatureEngineeringClient.create_table()` call on the Gold table.
+- **Databricks Vector Search** — the RAG uses local FAISS. A Vector Search endpoint was configured in the stub `VishwaScore Financial Literacy RAG.py` but no retrieval code was written.
+- **Latency instrumentation** — the voice pipeline has no p50 / p95 measurement.
+- **BhashaBench eval** — the loader exists (`Voice Ai/Load BhashaBench Data.ipynb`); the actual eval run + numbers have not been re-verified for this repo.
+- **Model card + fairness audit** — no slice metrics by persona / gender / region yet.
+- **RAG eval harness** — hit@k / MRR / LLM-as-judge on a held-out Q&A set.
+- **Extract notebooks into `src/vishwascore/` package + pytest CI.**
+- **Consolidate parallel workstreams** — pick canonical directory layout, archive the rest.
 
-## Step 3 — Evidence, not just claims
+## Cleanup punchlist
 
-- [ ] `docs/MODEL_CARD.md`: dataset, intended use, metrics, slice metrics by gender / region / age band, fairness audit (demographic parity, equal opportunity), known limitations.
-- [ ] `docs/RAG_EVAL.md`: 50-item Q&A eval set, hit@k, MRR, LLM-as-judge faithfulness.
-- [ ] `docs/LATENCY.md`: instrumented p50 / p95 for ASR → retrieval → LLM → TTS on a fixed benchmark set.
-- [ ] Replace `TODO` rows in the README results table with real numbers.
+- `VishwaScore Feature Store Registration.py` and `VishwaScore Financial Literacy RAG.py` are stubs — either finish them or delete them.
+- `Xscore/` and `notebooks/` contain duplicated versions of the same Bronze/Silver/Gold + model notebooks. Pick one.
+- `data` (empty top-level file) and `Xscore/README.md` (2-line stub) should be deleted.
+- `QUICK_REFERENCE.txt` + `README_STREAMLIT.md` are hackathon-era deployment notes; either merge into `DEPLOYMENT_GUIDE.md` or delete.
 
-## Step 4 — Tests + CI
+## Priority for interview readiness
 
-- [ ] `tests/` — smoke tests for feature builders, retriever top-k, model I/O contract.
-- [ ] `.github/workflows/ci.yml` — ruff + pytest on PR.
-- [ ] `pre-commit` config.
-
-## Step 5 — Architecture decisions
-
-- [ ] `docs/decisions/0001-lightgbm-vs-neural.md`
-- [ ] `docs/decisions/0002-faiss-plus-vector-search.md`
-- [ ] `docs/decisions/0003-synthetic-data-strategy.md`
-
-## Step 6 — Demo assets
-
-- [ ] 60–90s Loom / YouTube demo linked from README.
-- [ ] Screenshots / GIF of the app in each of the four dashboard tabs.
+1. Fill in the BhashaBench + RAG eval numbers with real re-runs.
+2. Instrument voice-pipeline latency, put p50 / p95 in the README results table.
+3. Publish `docs/MODEL_CARD.md`.
+4. Consolidate to a single canonical layout.
+5. Extract notebooks → `src/vishwascore/` + pytest CI.

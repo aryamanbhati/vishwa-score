@@ -11,7 +11,8 @@ import io
 spark = SparkSession.builder.getOrCreate()
 
 # ── Setup ────────────────────────────────────────
-HF_TOKEN = "REVOKED_HF_TOKEN_SEE_ENV"  # paste your token
+import os
+HF_TOKEN = os.environ.get("HF_TOKEN", "")
 
 spark.sql("CREATE CATALOG IF NOT EXISTS arthasetu")
 spark.sql("CREATE SCHEMA IF NOT EXISTS arthasetu.bronze")

@@ -462,7 +462,8 @@ from databricks.sdk.core import Config
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # SARVAM AI CONFIG + FUNCTIONS
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SARVAM_KEY = "REVOKED_SARVAM_KEY_SEE_ENV"
+import os
+SARVAM_KEY = os.environ.get("SARVAM_API_KEY", "")
 
 LANG_NAMES = {
     "hi": "Hindi", "ta": "Tamil", "te": "Telugu", "mr": "Marathi",

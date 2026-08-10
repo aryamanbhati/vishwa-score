@@ -1,9 +1,10 @@
+import os
 import requests
 import base64
 import re
 import tempfile
 
-SARVAM_KEY = "REVOKED_SARVAM_KEY_SEE_ENV"
+SARVAM_KEY = os.environ.get("SARVAM_API_KEY", "")
 
 LANG_CODE = {"hi":"hi-IN","ta":"ta-IN","te":"te-IN","mr":"mr-IN","bn":"bn-IN","gu":"gu-IN","pa":"pa-IN","en":"en-IN","kn":"kn-IN","ml":"ml-IN"}
 LANG_NAMES = {"hi":"Hindi","ta":"Tamil","te":"Telugu","mr":"Marathi","bn":"Bengali","gu":"Gujarati","pa":"Punjabi","en":"English","kn":"Kannada","ml":"Malayalam"}

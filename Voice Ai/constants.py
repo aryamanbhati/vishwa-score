@@ -2,9 +2,10 @@
 # ArthaSetu — Central config & constants
 # ─────────────────────────────────────────────
 
-# API Keys — paste yours here
-SARVAM_API_KEY    = "REVOKED_SARVAM_KEY_SEE_ENV"
-HF_TOKEN          = "REVOKED_HF_TOKEN_SEE_ENV"
+# API Keys — read from environment. Never hardcode. See .env.example.
+import os
+SARVAM_API_KEY    = os.environ.get("SARVAM_API_KEY", "")
+HF_TOKEN          = os.environ.get("HF_TOKEN", "")
 
 # Unity Catalog
 CATALOG           = "arthasetu"

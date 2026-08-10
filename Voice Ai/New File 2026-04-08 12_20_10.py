@@ -7,7 +7,7 @@ import shutil
 import os
 
 # Authenticate with HuggingFace
-HF_TOKEN = "REVOKED_HF_TOKEN_SEE_ENV"
+HF_TOKEN = os.environ.get("HF_TOKEN", "")
 login(token=HF_TOKEN)
 print("✅ HuggingFace logged in")
 
