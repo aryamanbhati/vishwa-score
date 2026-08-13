@@ -42,6 +42,7 @@ mlartifacts/
 *.onnx
 faiss_index/
 *.faiss
+voice/local/data/faiss.index
 
 # Data (don't commit large or sensitive data)
 data/raw/

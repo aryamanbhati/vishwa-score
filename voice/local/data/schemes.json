@@ -1,0 +1,79 @@
+[
+  {
+    "scheme_id": 1,
+    "scheme_name": "PM SVANidhi Tier 1",
+    "target_group": "street_vendor",
+    "state": "All India",
+    "content": "PM SVANidhi Tier 1: Working capital loan for street vendors up to Rs 10,000. No collateral or guarantor required. 7% annual interest subsidy on timely repayment. Eligibility: Must have a vending certificate or letter of recommendation from the Town Vending Committee. Repayment: 12 monthly instalments. Apply at any bank, NBFC-MFI, or through the PM SVANidhi portal."
+  },
+  {
+    "scheme_id": 2,
+    "scheme_name": "PM SVANidhi Tier 2",
+    "target_group": "street_vendor",
+    "state": "All India",
+    "content": "PM SVANidhi Tier 2: Enhanced loan of Rs 20,000 for street vendors who fully repaid Tier 1. Same 7% interest subsidy. Digital transaction cashback of up to Rs 1,200/year for vendors who use digital payments. Repayment: 18 monthly instalments."
+  },
+  {
+    "scheme_id": 3,
+    "scheme_name": "PM SVANidhi Tier 3",
+    "target_group": "street_vendor",
+    "state": "All India",
+    "content": "PM SVANidhi Tier 3: Highest tier loan of Rs 50,000 for vendors with excellent repayment track record (completed Tier 1 + Tier 2). 7% interest subsidy continues. Designed for vendors who want to scale up their business. Repayment: 18-24 monthly instalments."
+  },
+  {
+    "scheme_id": 4,
+    "scheme_name": "PMMY Mudra Shishu",
+    "target_group": "micro_business",
+    "state": "All India",
+    "content": "Pradhan Mantri Mudra Yojana — Shishu category: Micro business loan up to Rs 50,000 for non-farm small businesses. No collateral needed. Covers small shops, street vendors, artisans, food stall operators, repair services. Interest rate: 10-12% (varies by bank). Apply at any scheduled commercial bank, RRB, or MFI."
+  },
+  {
+    "scheme_id": 5,
+    "scheme_name": "PMMY Mudra Kishor",
+    "target_group": "small_business",
+    "state": "All India",
+    "content": "Pradhan Mantri Mudra Yojana — Kishor category: Business loan from Rs 50,000 to Rs 5,00,000 for growing enterprises. Requires at least 1 year of business history. Suitable for expanding inventory, buying equipment, or adding employees. Collateral may be required for amounts above Rs 2 lakh."
+  },
+  {
+    "scheme_id": 6,
+    "scheme_name": "PMMY Mudra Tarun",
+    "target_group": "established_business",
+    "state": "All India",
+    "content": "Pradhan Mantri Mudra Yojana — Tarun category: Business loan from Rs 5 lakh to Rs 10 lakh for established businesses looking to scale up significantly. Requires strong business track record and financial documentation. Collateral and income proof typically required."
+  },
+  {
+    "scheme_id": 7,
+    "scheme_name": "Kisan Credit Card",
+    "target_group": "farmer",
+    "state": "All India",
+    "content": "Kisan Credit Card (KCC): Agricultural credit up to Rs 3,00,000 at 7% interest (effective 4% with timely repayment subsidy under Interest Subvention Scheme). Covers crop cultivation, post-harvest expenses, dairy, fishery, and animal husbandry. Eligibility: All farmers — owner cultivators, tenant farmers, sharecroppers, oral lessees, SHGs, and joint liability groups. Apply at any bank branch."
+  },
+  {
+    "scheme_id": 8,
+    "scheme_name": "NABARD Dairy Entrepreneurship Scheme",
+    "target_group": "farmer",
+    "state": "All India",
+    "content": "NABARD Dairy Entrepreneurship Development Scheme: Loans up to Rs 7,00,000 for setting up small dairy farms (2-10 animals), milk processing, and dairy product units. Capital subsidy: 25% of project cost (33.33% for SC/ST and North-Eastern states). Maximum subsidy: Rs 1.75 lakh for general, Rs 2.33 lakh for SC/ST. Apply through NABARD-affiliated commercial banks or RRBs."
+  },
+  {
+    "scheme_id": 9,
+    "scheme_name": "SHG Bank Linkage Programme",
+    "target_group": "shg_woman",
+    "state": "All India",
+    "content": "Self-Help Group Bank Linkage Programme: Women's SHGs (10-20 members) can access collective loans up to Rs 10,00,000 without individual collateral. Interest rates typically 10-12%. The group's internal savings record (minimum 6 months) serves as collateral substitute. SHGs can lend to members at group-decided rates. Facilitated by NABARD, NRLM, and state livelihoods missions."
+  },
+  {
+    "scheme_id": 10,
+    "scheme_name": "PM Vishwakarma Tier 1",
+    "target_group": "artisan",
+    "state": "All India",
+    "content": "PM Vishwakarma Tier 1: Collateral-free loan of Rs 1,00,000 at 5% interest for traditional artisans and craftspeople — blacksmiths, goldsmiths, potters, carpenters, sculptors, cobblers, tailors, basket/mat/broom makers, doll/toy makers, barbers, garland makers, washermen, boat makers. Includes 5-7 days of skill training with Rs 500/day stipend + Rs 15,000 toolkit grant. Apply at PM Vishwakarma portal."
+  },
+  {
+    "scheme_id": 11,
+    "scheme_name": "PM Vishwakarma Tier 2",
+    "target_group": "artisan",
+    "state": "All India",
+    "content": "PM Vishwakarma Tier 2: Enhanced loan of Rs 2,00,000 at 5% interest for artisans who have repaid Tier 1. Includes 15 days of advanced skill training with stipend. Digital incentive: Rs 1 per digital transaction (max Rs 100/month) for artisans who adopt digital payments. Same 18 traditional craft categories as Tier 1."
+  }
+]

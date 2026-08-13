@@ -124,18 +124,20 @@ vishwa-score/
 │   └── model/                           # Earlier XScore workstream — train / hyperopt / SHAP
 │
 ├── voice/                               # Voice + RAG module ("ArthaSetu")
-│   ├── voice_advisor.py                 # Sarvam ASR / LLM / TTS wrappers
-│   ├── 4_voice_pipeline.py              # Full ASR → FAISS RAG → LLM → TTS pipeline
+│   ├── local/                           # Local-runnable voice app (no Databricks)
+│   │   ├── app.py                       # Streamlit UI — text + voice input, RAG, TTS
+│   │   ├── sarvam_client.py             # Sarvam ASR / LLM / TTS wrappers
+│   │   ├── retriever.py                 # FAISS retriever over scheme corpus
+│   │   ├── data/schemes.json            # 11 government loan schemes
+│   │   └── requirements.txt             # Local dependencies
+│   ├── voice_advisor.py                 # Sarvam wrappers (Databricks variant)
+│   ├── 4_voice_pipeline.py              # Full ASR → FAISS RAG → LLM → TTS (Databricks)
 │   ├── 5_integration_layer.py           # Combines VishwaScore + voice
-│   ├── voice_app.py                     # Standalone voice-only Streamlit UI
 │   ├── arthasetu_app.py                 # Voice UI (Sarvam + inline scheme corpus)
 │   ├── arthasetu_integrated_app.py      # Score + voice unified UI
 │   ├── constants.py                     # Language codes, Sarvam speakers, DBFS paths
-│   ├── constants_integrated.py          # Merged constants for the integrated app
-│   ├── 2.py / 3.py / Gold.py            # UC setup, HF/BhashaBench data loader
 │   ├── bhashabench_hf_loader.py         # HuggingFace loader for BhashaBench eval
-│   ├── load_bhashabench_data.ipynb      # BhashaBench eval driver
-│   └── silver_updated.ipynb             # Silver refresh
+│   └── load_bhashabench_data.ipynb      # BhashaBench eval driver
 │
 ├── app/                                 # Older 4-page lending-officer dashboard (XScore)
 ├── vishwascore_streamlit_app.py         # Newer Explorer dashboard (VishwaScore)
@@ -186,11 +188,26 @@ streamlit run vishwascore_streamlit_app.py
 
 Requires `DATABRICKS_SERVER_HOSTNAME`, `DATABRICKS_HTTP_PATH`, `DATABRICKS_TOKEN` in the environment. See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for deploying to Streamlit Community Cloud.
 
-### 4. Run the voice module
+### 4. Run the voice module (local — no Databricks needed)
 
-The voice module currently runs inside Databricks (needs the FAISS index at `/Volumes/arthasetu/gold/rag_files/rag.index`). To run locally you'd need to rebuild the index from a scheme corpus and adapt paths — this is on the roadmap.
+```bash
+pip install -r voice/local/requirements.txt
+export SARVAM_API_KEY=sk_...          # Get one at https://www.sarvam.ai
+cd voice/local
+streamlit run app.py
+```
 
-Standalone Streamlit voice UI: `streamlit run voice/arthasetu_app.py` (after setting `SARVAM_API_KEY`).
+The local voice app builds a FAISS index from the committed `voice/local/data/schemes.json` (11 government loan schemes) on first launch, then caches it. The pipeline is:
+
+1. **Input** — type a question or record audio (microphone)
+2. **ASR** — Sarvam Saaras v3 transcribes + translates to English, detects language
+3. **RAG** — FAISS retrieves the top-5 matching schemes (MiniLM-L6-v2 embeddings)
+4. **LLM** — sarvam-m 24B generates a warm answer in the user's native language
+5. **TTS** — Sarvam Bulbul v2 speaks the answer back
+
+Supports 10 Indic languages: Hindi, Tamil, Telugu, Marathi, Bengali, Gujarati, Punjabi, Kannada, Malayalam, English.
+
+> **Databricks variant:** `voice/4_voice_pipeline.py` runs the same pipeline on Databricks, using a managed FAISS index in UC Volumes and logging sessions to `arthasetu.gold.voice_sessions` (Delta). The production upgrade at `notebooks/vishwascore/08_vector_search_rag.py` replaces FAISS with Databricks Vector Search.
 
 ---
 
@@ -226,10 +243,12 @@ PySpark · NumPy / SciPy · Faker (`en_IN`) · deterministic seeding
 | Feature Store registration | [`notebooks/vishwascore/06_feature_store_registration.py`](notebooks/vishwascore/06_feature_store_registration.py) |
 | Model Serving deployment | [`notebooks/vishwascore/07_model_serving_deploy.py`](notebooks/vishwascore/07_model_serving_deploy.py) |
 | Vector Search RAG index | [`notebooks/vishwascore/08_vector_search_rag.py`](notebooks/vishwascore/08_vector_search_rag.py) |
-| The RAG + voice pipeline | [`voice/4_voice_pipeline.py`](voice/4_voice_pipeline.py) |
-| Sarvam ASR / LLM / TTS wrappers | [`voice/voice_advisor.py`](voice/voice_advisor.py) |
-| The voice Streamlit UI | [`voice/arthasetu_app.py`](voice/arthasetu_app.py) |
-| Score + voice unified UI | [`voice/arthasetu_integrated_app.py`](voice/arthasetu_integrated_app.py) |
+| **Local voice app (no Databricks)** | [`voice/local/app.py`](voice/local/app.py) |
+| Local Sarvam client | [`voice/local/sarvam_client.py`](voice/local/sarvam_client.py) |
+| Local FAISS retriever | [`voice/local/retriever.py`](voice/local/retriever.py) |
+| Scheme corpus (11 schemes) | [`voice/local/data/schemes.json`](voice/local/data/schemes.json) |
+| The RAG + voice pipeline (Databricks) | [`voice/4_voice_pipeline.py`](voice/4_voice_pipeline.py) |
+| Sarvam ASR / LLM / TTS wrappers (Databricks) | [`voice/voice_advisor.py`](voice/voice_advisor.py) |
 | The Explorer dashboard | [`vishwascore_streamlit_app.py`](vishwascore_streamlit_app.py) |
 | The 4-page lending-officer dashboard (earlier XScore version) | [`app/app.py`](app/app.py) |
 | Earlier XScore modelling notebooks | [`notebooks/model/`](notebooks/model/) |
