@@ -1,4 +1,0 @@
-streamlit==1.44.0
-requests
-databricks-sdk
-databricks-sql-connector

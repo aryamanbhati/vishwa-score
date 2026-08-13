@@ -20,12 +20,20 @@ Where the project stands and what's next. Written to be honest, not aspirational
 - **Extract notebooks into `src/vishwascore/` package + pytest CI.**
 - **Consolidate parallel workstreams** — pick canonical directory layout, archive the rest.
 
-## Cleanup punchlist
+## Cleanup done
 
-- `VishwaScore Feature Store Registration.py` and `VishwaScore Financial Literacy RAG.py` are stubs — either finish them or delete them.
-- `Xscore/` and `notebooks/` contain duplicated versions of the same Bronze/Silver/Gold + model notebooks. Pick one.
-- `data` (empty top-level file) and `Xscore/README.md` (2-line stub) should be deleted.
-- `QUICK_REFERENCE.txt` + `README_STREAMLIT.md` are hackathon-era deployment notes; either merge into `DEPLOYMENT_GUIDE.md` or delete.
+- ✅ Stub notebooks deleted (`VishwaScore Feature Store Registration.py`, `VishwaScore Financial Literacy RAG.py`).
+- ✅ `Xscore/` folder (byte-identical duplicates + one buggy app variant) deleted.
+- ✅ Top-level junk removed: `QUICK_REFERENCE.txt`, `README_STREAMLIT.md`, empty `data`, `requirements.txt`.
+- ✅ `Voice Ai/` renamed to `voice/`; bad-name files inside (spaces, parens, colons) renamed to snake_case.
+- ✅ Top-level `VishwaScore *.py` notebooks moved into `notebooks/vishwascore/` with numeric prefixes.
+- ✅ Empty `src/vishwa/` skeleton removed.
+- ✅ `pyproject.toml` simplified — no phantom package.
+
+## Still to do
+
+- Two workstreams (XScore in `notebooks/data/` + `notebooks/model/` + `app/`, and VishwaScore in `notebooks/vishwascore/` + `vishwascore_streamlit_app.py`) still coexist for provenance; consider archiving XScore once VishwaScore is the sole story.
+- Consolidate the three voice-app variants (`voice/voice_app.py`, `voice/arthasetu_app.py`, `voice/arthasetu_integrated_app.py`) into one canonical entrypoint.
 
 ## Priority for interview readiness
 

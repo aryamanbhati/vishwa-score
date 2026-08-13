@@ -85,44 +85,43 @@ graph TD
 
 ## Repository layout
 
-The repo currently reflects **two parallel workstreams from the hackathon**, plus my post-hackathon repo-hygiene pass. Nothing has been consolidated yet — see [docs/ROADMAP.md](docs/ROADMAP.md).
-
 ```
 vishwa-score/
-├── VishwaScore Auto Loader Bronze (Streaming).py    # NB — Bronze ingest w/ Auto Loader
-├── VishwaScore Bronze to Silver Pipeline.py         # NB — Silver cleaning
-├── VishwaScore Silver to Gold Features.py           # NB — 73 features
-├── VishwaScore DLT Pipeline (Silver + Gold).py      # DLT pipeline (Silver + Gold)
-├── VishwaScore ML Model Training and Prediction.py  # NB — LightGBM train + MLflow
-├── vishwascore_streamlit_app.py                     # Streamlit Cloud dashboard
-├── DEPLOYMENT_GUIDE.md                              # Streamlit Cloud deploy steps
+├── notebooks/
+│   ├── vishwascore/                     # Current, 100K-user, 73-feature workstream
+│   │   ├── 01_auto_loader_bronze.py     # Bronze ingest w/ Auto Loader (streaming)
+│   │   ├── 02_bronze_to_silver.py       # Silver cleaning + constraints
+│   │   ├── 03_silver_to_gold_features.py# 73 features across 4 categories
+│   │   ├── 04_dlt_pipeline.py           # DLT pipeline (Silver + Gold as one job)
+│   │   └── 05_model_train.py            # LightGBM + MLflow + @Champion register
+│   ├── data/                            # Earlier XScore workstream — bronze/silver/gold
+│   └── model/                           # Earlier XScore workstream — train / hyperopt / SHAP
 │
-├── Voice Ai/                                        # Voice + RAG module ("ArthaSetu")
-│   ├── voice_advisor.py                             # ASR / LLM / TTS wrappers
-│   ├── 4_voice_pipeline.py                          # Full ASR → RAG → LLM → TTS pipeline
-│   ├── 5_integration_layer.py                       # Combines VishwaScore + voice
-│   ├── arthasetu_app.py                             # Standalone Streamlit voice UI
-│   ├── arthasetu_integrated_app.py                  # Score + voice unified UI
-│   ├── constants.py                                 # Language codes, speakers, paths
-│   ├── constants_integrated.py                      # Merged constants for integrated app
-│   ├── 2.py / 3.py / Gold.py                        # UC setup, HF/BhashaBench loader
-│   ├── Load BhashaBench Data.ipynb                  # BhashaBench eval loader
-│   └── silver updated.ipynb                         # Silver refresh
+├── voice/                               # Voice + RAG module ("ArthaSetu")
+│   ├── voice_advisor.py                 # Sarvam ASR / LLM / TTS wrappers
+│   ├── 4_voice_pipeline.py              # Full ASR → FAISS RAG → LLM → TTS pipeline
+│   ├── 5_integration_layer.py           # Combines VishwaScore + voice
+│   ├── voice_app.py                     # Standalone voice-only Streamlit UI
+│   ├── arthasetu_app.py                 # Voice UI (Sarvam + inline scheme corpus)
+│   ├── arthasetu_integrated_app.py      # Score + voice unified UI
+│   ├── constants.py                     # Language codes, Sarvam speakers, DBFS paths
+│   ├── constants_integrated.py          # Merged constants for the integrated app
+│   ├── 2.py / 3.py / Gold.py            # UC setup, HF/BhashaBench data loader
+│   ├── bhashabench_hf_loader.py         # HuggingFace loader for BhashaBench eval
+│   ├── load_bhashabench_data.ipynb      # BhashaBench eval driver
+│   └── silver_updated.ipynb             # Silver refresh
 │
-├── Xscore/                                          # Earlier XScore branch of the project
-│   ├── app/                                         # 4-page Streamlit lending-officer dashboard
-│   ├── data/                                        # bronze / silver / gold notebooks
-│   └── model/                                       # train / hyperopt / SHAP / refresh
+├── app/                                 # Older 4-page lending-officer dashboard (XScore)
+├── vishwascore_streamlit_app.py         # Newer Explorer dashboard (VishwaScore)
+├── DEPLOYMENT_GUIDE.md                  # Streamlit Cloud deploy steps for the Explorer
 │
-├── notebooks/data/                                  # renamed XScore/data (snake_case)
-├── notebooks/model/                                 # renamed XScore/model (snake_case)
-├── app/                                             # renamed XScore/app (snake_case)
-│
-├── .env.example                                     # Secrets template
-├── pyproject.toml                                   # Package metadata
-├── LICENSE                                          # MIT
-└── docs/ROADMAP.md                                  # Cleanup + roadmap tracker
+├── .env.example                         # Secrets template (SARVAM, HF, DATABRICKS)
+├── pyproject.toml                       # Lint/format config
+├── LICENSE                              # MIT
+└── docs/ROADMAP.md                      # Honest gap list + follow-up work
 ```
+
+**Two workstreams live in this repo** — the earlier **XScore** (LightGBM binary default classifier on 50K synthetic profiles, in `notebooks/data/` + `notebooks/model/` + `app/`) and the current **VishwaScore** (LightGBM regressor on 100K users / 27.3M transactions with 73 features, in `notebooks/vishwascore/` + `vishwascore_streamlit_app.py`). VishwaScore superseded XScore during the hackathon; both are kept for provenance.
 
 ---
 
@@ -144,14 +143,14 @@ cp .env.example .env
 
 ### 2. Reproduce the data + model on Databricks
 
-Import this repo as a Databricks Git folder (Workspace → Git folders → Add) and run the notebooks in this order (each corresponds to one file at the repo root):
+Import this repo as a Databricks Git folder (Workspace → Git folders → Add) and run the notebooks in `notebooks/vishwascore/` in numeric order:
 
-1. `VishwaScore Auto Loader Bronze (Streaming).py` — streams raw synthetic data into Bronze
-2. `VishwaScore Bronze to Silver Pipeline.py` — cleans + enforces constraints
-3. `VishwaScore Silver to Gold Features.py` — builds the 73-feature Gold table
-4. `VishwaScore ML Model Training and Prediction.py` — trains LightGBM, logs to MLflow, registers `@Champion`, writes scores to `workspace.default.vishwascore_dashboard`
+1. `01_auto_loader_bronze.py` — streams raw synthetic data into Bronze
+2. `02_bronze_to_silver.py` — cleans + enforces constraints
+3. `03_silver_to_gold_features.py` — builds the 73-feature Gold table
+4. `05_model_train.py` — trains LightGBM, logs to MLflow, registers `@Champion`, writes scores to `workspace.default.vishwascore_dashboard`
 
-`VishwaScore DLT Pipeline (Silver + Gold).py` is the DLT alternative that runs Silver + Gold as a single managed pipeline. Wire it up as a DLT job in the Databricks UI.
+`04_dlt_pipeline.py` is the DLT alternative that runs Silver + Gold as a single managed pipeline. Wire it up as a DLT job in the Databricks UI.
 
 ### 3. Run the Streamlit dashboard
 
@@ -165,7 +164,7 @@ Requires `DATABRICKS_SERVER_HOSTNAME`, `DATABRICKS_HTTP_PATH`, `DATABRICKS_TOKEN
 
 The voice module currently runs inside Databricks (needs the FAISS index at `/Volumes/arthasetu/gold/rag_files/rag.index`). To run locally you'd need to rebuild the index from a scheme corpus and adapt paths — this is on the roadmap.
 
-Standalone Streamlit voice UI: `streamlit run "Voice Ai/arthasetu_app.py"` (after setting `SARVAM_API_KEY`).
+Standalone Streamlit voice UI: `streamlit run voice/arthasetu_app.py` (after setting `SARVAM_API_KEY`).
 
 ---
 
@@ -195,16 +194,16 @@ PySpark · NumPy / SciPy · Faker (`en_IN`) · deterministic seeding
 
 | I want to see... | Look at |
 | --- | --- |
-| Feature engineering — the 73 features | `VishwaScore Silver to Gold Features.py` |
-| Model training + MLflow | `VishwaScore ML Model Training and Prediction.py` |
-| DLT pipeline | `VishwaScore DLT Pipeline (Silver + Gold).py` |
-| The RAG + voice pipeline | `Voice Ai/4_voice_pipeline.py` |
-| Sarvam ASR / LLM / TTS wrappers | `Voice Ai/voice_advisor.py` |
-| The voice Streamlit UI | `Voice Ai/arthasetu_app.py` |
-| Score + voice unified UI | `Voice Ai/arthasetu_integrated_app.py` |
-| The Explorer dashboard | `vishwascore_streamlit_app.py` |
-| The 4-page lending-officer dashboard (earlier version) | `app/app.py` |
-| Earlier XScore modelling notebooks | `Xscore/model/` |
+| Feature engineering — the 73 features | [`notebooks/vishwascore/03_silver_to_gold_features.py`](notebooks/vishwascore/03_silver_to_gold_features.py) |
+| Model training + MLflow | [`notebooks/vishwascore/05_model_train.py`](notebooks/vishwascore/05_model_train.py) |
+| DLT pipeline | [`notebooks/vishwascore/04_dlt_pipeline.py`](notebooks/vishwascore/04_dlt_pipeline.py) |
+| The RAG + voice pipeline | [`voice/4_voice_pipeline.py`](voice/4_voice_pipeline.py) |
+| Sarvam ASR / LLM / TTS wrappers | [`voice/voice_advisor.py`](voice/voice_advisor.py) |
+| The voice Streamlit UI | [`voice/arthasetu_app.py`](voice/arthasetu_app.py) |
+| Score + voice unified UI | [`voice/arthasetu_integrated_app.py`](voice/arthasetu_integrated_app.py) |
+| The Explorer dashboard | [`vishwascore_streamlit_app.py`](vishwascore_streamlit_app.py) |
+| The 4-page lending-officer dashboard (earlier XScore version) | [`app/app.py`](app/app.py) |
+| Earlier XScore modelling notebooks | [`notebooks/model/`](notebooks/model/) |
 
 ---
 
