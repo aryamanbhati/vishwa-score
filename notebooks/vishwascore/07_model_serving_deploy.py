@@ -14,7 +14,7 @@ import json
 import time
 
 # ── Config ───────────────────────────────────────────────────────────────────
-UC_MODEL_NAME = "workspace.default.vishwascore_model"
+UC_MODEL_NAME = "xscore.gold.credit_scorer"
 ENDPOINT_NAME = "vishwascore-scoring-api"
 
 # Get workspace URL and token from the notebook context
@@ -68,8 +68,8 @@ endpoint_config = {
             }
         ],
         "auto_capture_config": {
-            "catalog_name": "workspace",
-            "schema_name": "default",
+            "catalog_name": "xscore",
+            "schema_name": "gold",
             "table_name_prefix": "vishwascore_serving",
         },
     },

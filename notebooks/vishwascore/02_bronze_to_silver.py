@@ -9,8 +9,8 @@ from pyspark.sql.window import Window
 from datetime import datetime
 
 # Configuration
-BRONZE_TABLE_PATH = "/Volumes/workspace/default/bank_statement_01/*.csv"
-SILVER_TABLE_NAME = "workspace.default.silver_transactions_enriched"
+BRONZE_TABLE_PATH = "/Volumes/xscore/bronze/bank_statement_01/*.csv"
+SILVER_TABLE_NAME = "xscore.silver.silver_transactions_enriched"
 
 print("✓ Imports loaded successfully")
 print(f"Bronze Source: {BRONZE_TABLE_PATH}")
@@ -307,7 +307,7 @@ def bronze_bank_statements():
         .option("cloudFiles.format", "csv")
         .option("cloudFiles.inferColumnTypes", "true")
         .option("header", "true")
-        .load("/Volumes/workspace/default/bank_statement_01/")
+        .load("/Volumes/xscore/bronze/bank_statement_01/")
     )
 
 # Silver Layer: Cleaned and Categorized Transactions

@@ -13,8 +13,8 @@ from pyspark.sql.types import FloatType, DoubleType
 from datetime import datetime, timedelta
 
 # Configuration
-SILVER_TABLE_NAME = "workspace.default.silver_transactions_enriched"
-GOLD_TABLE_NAME = "workspace.default.gold_vishwascore_features"
+SILVER_TABLE_NAME = "xscore.silver.silver_transactions_enriched"
+GOLD_TABLE_NAME = "xscore.gold.credit_feature_store"
 
 print("="*70)
 print("  GOLD LAYER: Feature Engineering for VishwaScore")

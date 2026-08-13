@@ -12,9 +12,9 @@ from pyspark.sql import functions as F
 from pyspark.sql.types import *
 
 # Configuration
-SOURCE_PATH = "/Volumes/workspace/default/bank_statement_01/*.csv"  # Your existing path
-CHECKPOINT_PATH = "/Volumes/workspace/default/checkpoints/bronze_autoloader"
-BRONZE_TABLE = "workspace.default.bronze_bank_statements_streaming"
+SOURCE_PATH = "/Volumes/xscore/bronze/bank_statement_01/*.csv"
+CHECKPOINT_PATH = "/Volumes/xscore/bronze/checkpoints/bronze_autoloader"
+BRONZE_TABLE = "xscore.bronze.bronze_bank_statements_streaming"
 
 print("="*70)
 print("  AUTO LOADER: Streaming Bronze Layer")

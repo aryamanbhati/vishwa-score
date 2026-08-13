@@ -20,10 +20,10 @@ import pandas as pd
 import numpy as np
 
 # ── Config ───────────────────────────────────────────────────────────────────
-GOLD_TABLE = "workspace.default.gold_vishwascore_features"
-FEATURE_TABLE = "workspace.default.vishwascore_credit_features"
-UC_MODEL_NAME = "workspace.default.vishwascore_model"
-EXPERIMENT = "/Users/ch7240563@iitd.ac.in/vishwascore_experiments"
+GOLD_TABLE = "xscore.gold.credit_feature_store"
+FEATURE_TABLE = "xscore.gold.vishwascore_credit_features"
+UC_MODEL_NAME = "xscore.gold.credit_scorer"
+EXPERIMENT = "/Users/aryamanbhati8@gmail.com/vishwascore_experiments"
 
 fe = FeatureEngineeringClient()
 mlflow.set_experiment(EXPERIMENT)
@@ -204,4 +204,4 @@ print(f"  Primary keys: {ft.primary_keys}")
 print(f"  Description:  {ft.description[:120]}...")
 
 print(f"\nModel {UC_MODEL_NAME} now has Feature Store lineage.")
-print("View in UC: Catalog → workspace → default → vishwascore_credit_features → Lineage tab")
+print("View in UC: Catalog → xscore → gold → vishwascore_credit_features → Lineage tab")

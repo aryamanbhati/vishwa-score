@@ -467,10 +467,10 @@ print("="*70)
 try:
     # 🔥 PRODUCTION FEATURE TABLE CONFIGURATION
     vishwascore_features = fs.create_table(
-        name="workspace.default.vishwascore_feature_store",
+        name="xscore.gold.vishwascore_feature_store",
         primary_keys=["user_id"],
-        df=spark.read.table("workspace.default.gold_vishwascore_features"),
-        schema=spark.read.table("workspace.default.gold_vishwascore_features").schema,
+        df=spark.read.table("xscore.gold.gold_vishwascore_features"),
+        schema=spark.read.table("xscore.gold.gold_vishwascore_features").schema,
         description="""VishwaScore ML features with 73 dimensions:
         - Payment Behaviour (15 features): EMI, utilities, insurance, rent, SIP
         - Digital Flow (26 features): UPI, merchants, categories, transaction patterns
@@ -481,7 +481,7 @@ try:
         """,
         tags={"project": "vishwascore", "version": "v1.0", "hackathon": "databricks_2024"}
     )
-    print("✓ Feature table created: workspace.default.vishwascore_feature_store")
+    print("✓ Feature table created: xscore.gold.vishwascore_feature_store")
     
 except Exception as e:
     if "already exists" in str(e):
@@ -493,10 +493,10 @@ except Exception as e:
 # STEP 2: Write/Update Features (Scheduled via DLT or notebook job)
 # ============================================================================
 
-df_gold = spark.read.table("workspace.default.gold_vishwascore_features")
+df_gold = spark.read.table("xscore.gold.gold_vishwascore_features")
 
 fs.write_table(
-    name="workspace.default.vishwascore_feature_store",
+    name="xscore.gold.vishwascore_feature_store",
     df=df_gold,
     mode="merge"  # Upsert: Update existing users, insert new ones
 )
@@ -512,7 +512,7 @@ print("  🚀 TO ENABLE ONLINE SERVING (Model Serving prerequisite):")
 print("="*70)
 print("""
 1. Go to: Databricks UI → Machine Learning → Feature Store
-2. Find table: workspace.default.vishwascore_feature_store
+2. Find table: xscore.gold.vishwascore_feature_store
 3. Click 'Publish to Online Store'
 4. Select: AWS RDS / Azure SQL / Databricks Online Tables
 5. Configure sync: Real-time (CDC) or Scheduled (hourly)
@@ -537,7 +537,7 @@ from databricks.feature_store import FeatureLookup
 # Define features to use
 feature_lookups = [
     FeatureLookup(
-        table_name="workspace.default.vishwascore_feature_store",
+        table_name="xscore.gold.vishwascore_feature_store",
         lookup_key="user_id",
         feature_names=None  # None = use all features
     )

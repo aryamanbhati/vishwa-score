@@ -29,13 +29,13 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
 # Configuration
-GOLD_TABLE_NAME = "workspace.default.gold_vishwascore_features"
-PREDICTION_TABLE_NAME = "workspace.default.vishwascore_predictions"
-DASHBOARD_TABLE_NAME = "workspace.default.vishwascore_dashboard"
+GOLD_TABLE_NAME = "xscore.gold.credit_feature_store"
+PREDICTION_TABLE_NAME = "xscore.gold.vishwascore_predictions"
+DASHBOARD_TABLE_NAME = "xscore.gold.vishwascore_dashboard"
 
 # 🔥 PRODUCTION ML CONFIGURATION
-MLFLOW_EXPERIMENT_NAME = "/Users/ch7240563@iitd.ac.in/vishwascore_experiments"
-UNITY_CATALOG_MODEL_NAME = "workspace.default.vishwascore_model"  # Unity Catalog 3-level namespace
+MLFLOW_EXPERIMENT_NAME = "/Users/aryamanbhati8@gmail.com/vishwascore_experiments"
+UNITY_CATALOG_MODEL_NAME = "xscore.gold.credit_scorer"  # Unity Catalog 3-level namespace
 
 print("="*70)
 print("  🎯 PRODUCTION ML PIPELINE WITH MLFLOW + UNITY CATALOG")
@@ -469,9 +469,9 @@ feature_importance_spark = spark.createDataFrame(feature_importance_df)
 feature_importance_spark.write \
     .format("delta") \
     .mode("overwrite") \
-    .saveAsTable("workspace.default.vishwascore_feature_importance")
+    .saveAsTable("xscore.gold.vishwascore_feature_importance")
 
-print("\n✓ Feature importance saved to: workspace.default.vishwascore_feature_importance")
+print("\n✓ Feature importance saved to: xscore.gold.vishwascore_feature_importance")
 
 # COMMAND ----------
 
@@ -701,7 +701,7 @@ print("="*70)
 print(f"\nTables Created:")
 print(f"  1. {PREDICTION_TABLE_NAME} - User predictions with scores")
 print(f"  2. {DASHBOARD_TABLE_NAME} - Dashboard-ready data with breakdowns")
-print(f"  3. workspace.default.vishwascore_feature_importance - Feature importance")
+print(f"  3. xscore.gold.vishwascore_feature_importance - Feature importance")
 print(f"\nNext Steps:")
 print(f"  - Use {DASHBOARD_TABLE_NAME} table in Databricks SQL Dashboard")
 print(f"  - Create visualizations for score distribution, persona analysis")
@@ -744,7 +744,7 @@ print("""
 
 3. Configure endpoint:
    Name: vishwascore-api
-   Model: workspace.default.vishwascore_model
+   Model: xscore.gold.vishwascore_model
    Version: Latest (or specific version like v1)
    Compute: Serverless (recommended) or Model Serving Classic
    Scale to zero: Enabled (cost optimization)
@@ -775,7 +775,7 @@ deployment_config = {
   "config": {
     "served_entities": [
       {
-        "entity_name": "workspace.default.vishwascore_model",
+        "entity_name": "xscore.gold.vishwascore_model",
         "entity_version": "1",  # Or use "latest"
         "workload_size": "Small",
         "scale_to_zero_enabled": True
@@ -1000,13 +1000,13 @@ ab_testing_config = {
   "config": {
     "served_entities": [
       {
-        "entity_name": "workspace.default.vishwascore_model",
+        "entity_name": "xscore.gold.vishwascore_model",
         "entity_version": "1",  # Old model
         "workload_size": "Small",
         "scale_to_zero_enabled": True
       },
       {
-        "entity_name": "workspace.default.vishwascore_model",
+        "entity_name": "xscore.gold.vishwascore_model",
         "entity_version": "2",  # New model
         "workload_size": "Small",
         "scale_to_zero_enabled": True
