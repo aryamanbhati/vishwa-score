@@ -11,8 +11,9 @@ Where the project stands and what's next. Written to be honest, not aspirational
 
 ## Not yet done (honest gap list)
 
-- **Feature Store registration** — notebook exists but is a one-line stub. Needs a real `FeatureEngineeringClient.create_table()` call on the Gold table.
-- **Databricks Vector Search** — the RAG uses local FAISS. A Vector Search endpoint was configured in the stub `VishwaScore Financial Literacy RAG.py` but no retrieval code was written.
+- ~~**Feature Store registration**~~ — Done. `06_feature_store_registration.py` registers the Gold table via `FeatureEngineeringClient` and logs the model with feature lineage.
+- ~~**Databricks Vector Search**~~ — Done. `08_vector_search_rag.py` creates a delta-sync index over the scheme corpus using `databricks-gte-large-en` Foundation Model embeddings.
+- ~~**Model Serving endpoint**~~ — Done. `07_model_serving_deploy.py` deploys the @Champion model as a REST endpoint with auto-scaling.
 - **Latency instrumentation** — the voice pipeline has no p50 / p95 measurement.
 - **BhashaBench eval** — the loader exists (`Voice Ai/Load BhashaBench Data.ipynb`); the actual eval run + numbers have not been re-verified for this repo.
 - **Model card + fairness audit** — no slice metrics by persona / gender / region yet.

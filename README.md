@@ -41,16 +41,39 @@ The user speaks in Hindi / Tamil / Telugu / Marathi / Bengali / Gujarati / Punja
 
 ## Results
 
+Two models coexist in this repo — the earlier binary-classification **XScore** and the newer regression **VishwaScore**. Numbers are pulled directly from MLflow / the app.
+
+### XScore classifier — LightGBM binary default (`xscore.gold.credit_scorer` @Champion)
+
+| Metric | Value | Notes |
+| --- | --- | --- |
+| Val AUC-ROC | **0.6665** | 50K synthetic profiles, 15/70/15 stratified split |
+| Test AUC-ROC | **0.6592** | |
+| Val AUC-PR | 0.1523 | Default rate ~9%, so PR is the right lens |
+| Test AUC-PR | 0.1511 | |
+| Val F1 | 0.1568 | Class-imbalance corrected (`scale_pos_weight=11.18`) |
+| AUC lift v3 vs v1 baseline | +0.006 | Modest — the synthetic-data ceiling is real |
+| Features | 31 across 6 pillars + composites | LightGBM, 63 leaves, depth 7, lr 0.04 |
+
+The AUC lift from alternative data (bills + UPI + govt signals over income + employment) is small on this synthetic set — the default label was generated from a hard-coded probability formula that already encodes the traditional signals, so the ceiling for "alt data adds" is bounded by the noise term in the generator. On real bureau-tied data this lift is expected to be materially larger.
+
+### VishwaScore regressor — the newer 100K-user workstream
+
 | Metric | Value | Source |
 | --- | --- | --- |
-| VishwaScore regression R² | **0.8938** | `vishwascore_streamlit_app.py:342` (footer stat) |
-| VishwaScore RMSE | **14.5** | same |
-| Training rows | **100,000 users / 27.3M transactions** | same |
-| Features | **73 engineered** across 4 categories | `VishwaScore Silver to Gold Features.py` |
-| Voice languages | 10 (hi/ta/te/mr/bn/gu/pa/kn/ml/en) | `Voice Ai/constants.py` |
-| BhashaBench Financial Q&A accuracy | *evaluation harness in `Voice Ai/Load BhashaBench Data.ipynb`* | pending re-run |
+| R² | 0.8938 | `vishwascore_streamlit_app.py:342` footer — reported from the training notebook; not yet re-verified against MLflow this session |
+| RMSE | 14.5 | same |
+| Training rows | 100K users / 27.3M transactions | |
+| Features | 73 engineered across 4 categories | [`notebooks/vishwascore/03_silver_to_gold_features.py`](notebooks/vishwascore/03_silver_to_gold_features.py) |
 
-> Latency numbers (p50 / p95 across ASR → RAG → LLM → TTS) are not yet instrumented — that's the top item on the roadmap.
+### Voice + RAG
+
+| Metric | Value | Notes |
+| --- | --- | --- |
+| Voice languages | 10 (hi/ta/te/mr/bn/gu/pa/kn/ml/en) | [`voice/constants.py`](voice/constants.py) |
+| RAG scheme catalog | 11 government loan schemes | Inline in [`voice/voice_advisor.py`](voice/voice_advisor.py); a richer FAISS-indexed corpus in [`voice/4_voice_pipeline.py`](voice/4_voice_pipeline.py) |
+| Voice pipeline latency (p50 / p95) | **not yet instrumented** | Top roadmap item |
+| BhashaBench Financial Q&A accuracy | eval loader in [`voice/load_bhashabench_data.ipynb`](voice/load_bhashabench_data.ipynb); numbers not verified in this repo |
 
 ---
 
@@ -93,7 +116,10 @@ vishwa-score/
 │   │   ├── 02_bronze_to_silver.py       # Silver cleaning + constraints
 │   │   ├── 03_silver_to_gold_features.py# 73 features across 4 categories
 │   │   ├── 04_dlt_pipeline.py           # DLT pipeline (Silver + Gold as one job)
-│   │   └── 05_model_train.py            # LightGBM + MLflow + @Champion register
+│   │   ├── 05_model_train.py            # LightGBM + MLflow + @Champion register
+│   │   ├── 06_feature_store_registration.py  # UC Feature Store + model lineage
+│   │   ├── 07_model_serving_deploy.py   # REST scoring endpoint (auto-scaling)
+│   │   └── 08_vector_search_rag.py      # Managed Vector Search index for RAG
 │   ├── data/                            # Earlier XScore workstream — bronze/silver/gold
 │   └── model/                           # Earlier XScore workstream — train / hyperopt / SHAP
 │
@@ -171,13 +197,13 @@ Standalone Streamlit voice UI: `streamlit run voice/arthasetu_app.py` (after set
 ## Tech stack
 
 **Data & platform (Databricks Data Intelligence Platform)**
-Delta Lake · Unity Catalog · Auto Loader · Delta Live Tables (DLT) · Delta Change Data Feed · Databricks Serverless SQL · Databricks Apps
+Delta Lake · Unity Catalog · Auto Loader · Delta Live Tables (DLT) · Delta Change Data Feed · Feature Engineering in UC (Feature Store) · Databricks Vector Search (delta-sync, Foundation Model embeddings) · Model Serving (REST endpoint, auto-scaling) · Databricks Serverless SQL · Databricks Apps
 
 **ML**
-LightGBM (regressor) · MLflow (tracking + model registry + `@Champion` alias) · SHAP · scikit-learn · Hyperopt
+LightGBM (regressor) · MLflow (tracking + model registry + `@Champion` alias + Feature Store lineage) · SHAP · scikit-learn · Hyperopt
 
 **RAG**
-FAISS · `sentence-transformers/paraphrase-MiniLM-L6-v2` embeddings · state-aware retrieval
+Databricks Vector Search (`databricks-gte-large-en` embeddings, delta-sync from scheme corpus) · FAISS fallback for local dev · `sentence-transformers/paraphrase-MiniLM-L6-v2`
 
 **Voice AI (Sarvam AI)**
 Saaras v3 ASR (10 Indic languages) · sarvam-m 24B LLM (OpenAI-compatible) · Bulbul v2 TTS · language auto-detect
@@ -197,6 +223,9 @@ PySpark · NumPy / SciPy · Faker (`en_IN`) · deterministic seeding
 | Feature engineering — the 73 features | [`notebooks/vishwascore/03_silver_to_gold_features.py`](notebooks/vishwascore/03_silver_to_gold_features.py) |
 | Model training + MLflow | [`notebooks/vishwascore/05_model_train.py`](notebooks/vishwascore/05_model_train.py) |
 | DLT pipeline | [`notebooks/vishwascore/04_dlt_pipeline.py`](notebooks/vishwascore/04_dlt_pipeline.py) |
+| Feature Store registration | [`notebooks/vishwascore/06_feature_store_registration.py`](notebooks/vishwascore/06_feature_store_registration.py) |
+| Model Serving deployment | [`notebooks/vishwascore/07_model_serving_deploy.py`](notebooks/vishwascore/07_model_serving_deploy.py) |
+| Vector Search RAG index | [`notebooks/vishwascore/08_vector_search_rag.py`](notebooks/vishwascore/08_vector_search_rag.py) |
 | The RAG + voice pipeline | [`voice/4_voice_pipeline.py`](voice/4_voice_pipeline.py) |
 | Sarvam ASR / LLM / TTS wrappers | [`voice/voice_advisor.py`](voice/voice_advisor.py) |
 | The voice Streamlit UI | [`voice/arthasetu_app.py`](voice/arthasetu_app.py) |
@@ -215,8 +244,9 @@ Tracked in [docs/ROADMAP.md](docs/ROADMAP.md). Highest priority:
 - [ ] **Instrument voice-pipeline latency** — p50 / p95 across ASR → retrieval → LLM → TTS.
 - [ ] **Refresh the BhashaBench eval numbers** and publish `docs/RAG_EVAL.md` with hit@k, MRR, and LLM-as-judge faithfulness.
 - [ ] **Model card** with slice metrics (persona / gender / region) and a fairness audit.
-- [ ] **Feature Store registration** — the notebook exists but is empty; wire it to `FeatureEngineeringClient.create_table` on the Gold table.
-- [ ] **Databricks Vector Search** — currently we use FAISS locally; migrate the RAG index to Vector Search for prod.
+- [x] **Feature Store registration** — Gold features registered via `FeatureEngineeringClient.create_table`; model logged with feature lineage.
+- [x] **Databricks Vector Search** — scheme corpus delta-synced to a managed Vector Search index with `databricks-gte-large-en` embeddings.
+- [x] **Model Serving** — REST scoring endpoint (`vishwascore-scoring-api`) with auto-scaling and scale-to-zero.
 - [ ] Extract notebook logic into `src/vishwascore/` importable modules + pytest CI.
 
 ---
